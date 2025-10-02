@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoQuiz - Entrena tu Memoria</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen" class="screen active">
+            <header class="header">
+                <h1 class="title">MemoQuiz</h1>
+                <p class="subtitle">Entrena tu memoria escribiendo párrafos completos</p>
+            </header>
+
+            <div class="input-section">
+                <div class="paragraph-list">
+                    <h3>Párrafos guardados:</h3>
+                    <div id="saved-paragraphs" class="saved-paragraphs">
+                        <!-- Los párrafos guardados se mostrarán aquí -->
+                    </div>
+                </div>
+
+                <div class="new-paragraph-section">
+                    <h3>Agregar nuevo párrafo:</h3>
+                    <textarea
+                        id="paragraph-input"
+                        placeholder="Ingresa aquí el párrafo que deseas memorizar..."
+                        rows="6"
+                        class="paragraph-input"
+                    ></textarea>
+                    <button id="add-paragraph-btn" class="btn btn-primary">Agregar Párrafo</button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>¿Cómo funciona?</h3>
+                <ul>
+                    <li>Agrega párrafos que deseas memorizar</li>
+                    <li>La aplicación dividirá el párrafo en frases (terminadas en punto)</li>
+                    <li>Estudia cada frase y escríbela de memoria</li>
+                    <li>Obtén un rango basado en tu rendimiento</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pantalla de Quiz -->
+        <div id="quiz-screen" class="screen">
+            <header class="quiz-header">
+                <div class="progress-info">
+                    <span id="current-sentence-num">Frase 1</span>
+                    <span id="total-sentences" class="total-sentences">de X</span>
+                </div>
+                <button id="quit-quiz-btn" class="btn btn-secondary">Abandonar</button>
+            </header>
+
+            <div class="quiz-content">
+                <div id="study-section" class="study-section">
+                    <div class="sentence-display">
+                        <h2 id="current-sentence-text" class="sentence-text"></h2>
+                    </div>
+                    <button id="ready-btn" class="btn btn-primary">Estoy listo para escribir</button>
+                </div>
+
+                <div id="writing-section" class="writing-section hidden">
+                    <div class="writing-prompt">
+                        <p>Escribe la frase de memoria:</p>
+                    </div>
+                    <textarea
+                        id="user-input"
+                        class="user-input"
+                        placeholder="Escribe aquí la frase que acabas de estudiar..."
+                        rows="4"
+                    ></textarea>
+                    <div class="writing-buttons">
+                        <button id="show-sentence-btn" class="btn btn-secondary">Ver frase nuevamente</button>
+                        <button id="submit-sentence-btn" class="btn btn-primary">Enviar frase</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Resultados -->
+        <div id="results-screen" class="screen">
+            <header class="results-header">
+                <h1 class="results-title">¡Párrafo Completado!</h1>
+            </header>
+
+            <div class="results-content">
+                <div class="rank-section">
+                    <h2 id="final-rank" class="rank-display"></h2>
+                    <p id="rank-description" class="rank-description"></p>
+                </div>
+
+                <div class="detailed-results">
+                    <h3>Resumen por frase:</h3>
+                    <div id="sentence-results" class="sentence-results">
+                        <!-- Los resultados por frase se mostrarán aquí -->
+                    </div>
+                </div>
+
+                <div class="total-attempts">
+                    <p>Total de revisiones: <span id="total-attempts-count">0</span></p>
+                </div>
+
+                <div class="results-buttons">
+                    <button id="try-again-btn" class="btn btn-primary">Intentar de nuevo</button>
+                    <button id="back-to-start-btn" class="btn btn-secondary">Volver al inicio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para errores de frase -->
+    <div id="error-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">❌ Frase Incorrecta</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">La frase que escribiste no es correcta. Elige cómo continuar:</p>
+                <div class="modal-options">
+                    <button id="review-sentence-btn" class="btn btn-primary modal-btn">
+                        🔄 Ver frase y estudiar nuevamente
+                    </button>
+                    <button id="try-again-modal-btn" class="btn btn-secondary modal-btn">
+                        ✍️ Intentar escribir sin ver la frase
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para historial de resultados -->
+    <div id="history-modal" class="modal-overlay hidden">
+        <div class="modal-content modal-history">
+            <div class="modal-header">
+                <h3 class="modal-title">📊 Historial de Intentos</h3>
+                <button id="close-history-modal" class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="history-content" class="history-content">
+                    <!-- El historial se cargará aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
