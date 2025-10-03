@@ -68,7 +68,7 @@ export class StartView {
             return;
         }
 
-        paragraphs.forEach(paragraph => {
+        paragraphs.toReversed().forEach(paragraph => {
             const paragraphElement = document.createElement('div');
             paragraphElement.className = 'saved-paragraph';
 
