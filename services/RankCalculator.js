@@ -23,8 +23,8 @@ export class RankCalculator {
             totalErrors,
             sentenceProgress: session.sentences.map((sentence, index) => ({
                 sentence: sentence,
-                attempts: session.userProgress[index],
-                errors: session.userErrors[index]
+                attempts: session.userProgress[index] || 0,
+                errors: session.userErrors[index] || 0
             }))
         };
     }
