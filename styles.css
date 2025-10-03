@@ -97,6 +97,7 @@ body {
 }
 
 .timer-display {
+    width: 130px;
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--accent-primary);
