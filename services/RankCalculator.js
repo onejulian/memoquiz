@@ -46,7 +46,7 @@ export class RankCalculator {
         // C: 4+ revisiones
         if (totalAttempts === 0 && totalErrors === 0) {
             rank = 'S';
-            description = '¡Perfecto! Acertaste todas las frases a la primera sin errores.';
+            description = '¡Perfecto! Acertaste todas las frases a la primera sin revisiones.';
         } else if (totalAttempts === 0 && totalErrors > 0) {
             rank = 'A';
             description = '¡Excelente! Acertaste eventualmente, pero cometiste algunos errores.';

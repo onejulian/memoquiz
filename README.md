@@ -39,7 +39,7 @@ MemoQuiz es una aplicación web diseñada para ayudarte a mejorar tu memoria med
   - **Intentar escribir sin ver la frase**: Puedes cambiar de opinión y verla cuando quieras
 
 ### 3. Sistema de Puntuación
-- **Rango S** (0 revisiones y 0 errores): ¡Perfecto! Acertaste todas las frases a la primera sin errores
+- **Rango S** (0 revisiones y 0 errores): ¡Perfecto! Acertaste todas las frases a la primera sin revisiones
 - **Rango A** (0 revisiones pero con errores): ¡Excelente! Acertaste eventualmente pero cometiste algunos errores
 - **Rango B** (1-3 revisiones): Buen trabajo, pero puedes mejorar
 - **Rango C** (4+ revisiones): Necesitas más práctica
@@ -58,7 +58,7 @@ MemoQuiz es una aplicación web diseñada para ayudarte a mejorar tu memoria med
 5. **Toma tu tiempo**: No hay límite de tiempo, estudia hasta sentirte seguro de cada detalle
 6. **Practica regularmente**: Usa diferentes párrafos para mejorar tu capacidad de memorización precisa
 7. **Sé honesto**: El sistema requiere precisión exacta para fomentar el verdadero aprendizaje
-8. **Apunta al rango S**: Intenta acertar todas las frases a la primera sin errores para obtener el rango perfecto
+8. **Apunta al rango S**: Intenta acertar todas las frases a la primera sin revisiones para obtener el rango perfecto
 
 ## Instalación
 
