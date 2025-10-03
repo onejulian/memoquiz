@@ -250,6 +250,9 @@ export class AppController {
         console.log('Normalizado usuario:', TextProcessor.repr(TextProcessor.normalizeText(userText)));
         console.log('Normalizado correcto:', TextProcessor.repr(TextProcessor.normalizeText(correctText)));
 
+        // Limpiar el campo de entrada siempre que haya un error
+        this.quizView.clearUserInput();
+
         this.modalManager.showErrorModal(
             () => this.handleReviewSentence(),
             () => this.handleTryAgainModal()
@@ -268,7 +271,8 @@ export class AppController {
      * Maneja el intento de escribir nuevamente después de un error
      */
     handleTryAgainModal() {
-        this.quizView.clearUserInput();
+        // El campo ya fue limpiado en handleIncorrectAnswer
+        // Este método existe para cerrar el modal y mantener al usuario en la sección de escritura
     }
 
     /**
