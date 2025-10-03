@@ -17,8 +17,12 @@ export class QuizView {
         this.showSentenceBtn = document.getElementById('show-sentence-btn');
         this.submitSentenceBtn = document.getElementById('submit-sentence-btn');
         this.quitQuizBtn = document.getElementById('quit-quiz-btn');
+        this.timerValue = document.getElementById('timer-value');
         
         this.studySection = document.querySelector('#quiz-screen .study-section');
+        
+        // Control del cronómetro
+        this.timerInterval = null;
     }
 
     /**
@@ -86,6 +90,44 @@ export class QuizView {
      */
     showNotification(message, type) {
         NotificationManager.show(message, type);
+    }
+
+    /**
+     * Inicia el cronómetro
+     * @param {Function} updateCallback - Función que devuelve el tiempo formateado
+     */
+    startTimer(updateCallback) {
+        this.stopTimer(); // Asegurarse de que no haya otro cronómetro corriendo
+        this.timerInterval = setInterval(() => {
+            const formattedTime = updateCallback();
+            this.timerValue.textContent = formattedTime;
+        }, 1000);
+    }
+
+    /**
+     * Detiene el cronómetro
+     */
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+
+    /**
+     * Reinicia el display del cronómetro
+     */
+    resetTimer() {
+        this.stopTimer();
+        this.timerValue.textContent = '00:00';
+    }
+
+    /**
+     * Actualiza el display del cronómetro manualmente
+     * @param {string} formattedTime - Tiempo formateado (MM:SS)
+     */
+    updateTimerDisplay(formattedTime) {
+        this.timerValue.textContent = formattedTime;
     }
 }
 

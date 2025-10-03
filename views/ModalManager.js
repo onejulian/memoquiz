@@ -99,6 +99,10 @@ export class ModalManager {
                     </div>
                     <div class="history-stats">
                         <div class="history-stat">
+                            <span class="stat-label">⏱️ Tiempo:</span>
+                            <span class="stat-value">${result.getFormattedTime()}</span>
+                        </div>
+                        <div class="history-stat">
                             <span class="stat-label">Revisiones:</span>
                             <span class="stat-value">${result.totalAttempts}</span>
                         </div>

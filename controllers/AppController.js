@@ -166,8 +166,15 @@ export class AppController {
         if (!paragraph) return;
 
         this.currentSession = new QuizSession(paragraph);
+        this.currentSession.startTimer();
         this.loadCurrentSentence();
         this.screenManager.showScreen('quiz');
+        
+        // Iniciar el cronómetro visual
+        this.quizView.startTimer(() => {
+            this.currentSession.calculateElapsedTime();
+            return this.currentSession.getFormattedTime();
+        });
     }
 
     /**
@@ -279,6 +286,10 @@ export class AppController {
      * Completa el quiz y muestra resultados
      */
     completeQuiz() {
+        // Detener el cronómetro y calcular el tiempo final
+        this.quizView.stopTimer();
+        this.currentSession.calculateElapsedTime();
+        
         const calculatedResults = RankCalculator.calculateResults(this.currentSession);
         
         const result = new Result(
@@ -287,13 +298,16 @@ export class AppController {
             calculatedResults.rank,
             calculatedResults.totalAttempts,
             calculatedResults.totalErrors,
-            calculatedResults.sentenceProgress
+            calculatedResults.sentenceProgress,
+            null, // id
+            null, // completedAt
+            this.currentSession.elapsedTime // tiempo en segundos
         );
 
         this.results.push(result);
         this.saveData();
 
-        this.resultsView.showResults(calculatedResults);
+        this.resultsView.showResults(calculatedResults, this.currentSession.elapsedTime);
         this.screenManager.showScreen('results');
     }
 
@@ -303,6 +317,7 @@ export class AppController {
     handleQuitQuiz() {
         this.modalManager.showQuitConfirmModal(
             () => {
+                this.quizView.stopTimer();
                 this.currentSession = null;
                 this.screenManager.showScreen('start');
             }

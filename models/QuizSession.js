@@ -12,6 +12,8 @@ export class QuizSession {
         this.userProgress = []; // Número de revisiones por frase
         this.userErrors = []; // Número de errores por frase
         this.totalAttempts = 0;
+        this.startTime = null; // Marca de tiempo de inicio
+        this.elapsedTime = 0; // Tiempo transcurrido en segundos
     }
 
     /**
@@ -85,6 +87,36 @@ export class QuizSession {
     }
 
     /**
+     * Inicia el cronómetro
+     */
+    startTimer() {
+        if (!this.startTime) {
+            this.startTime = Date.now();
+        }
+    }
+
+    /**
+     * Calcula el tiempo transcurrido en segundos
+     * @returns {number}
+     */
+    calculateElapsedTime() {
+        if (this.startTime) {
+            this.elapsedTime = Math.floor((Date.now() - this.startTime) / 1000);
+        }
+        return this.elapsedTime;
+    }
+
+    /**
+     * Obtiene el tiempo formateado (MM:SS)
+     * @returns {string}
+     */
+    getFormattedTime() {
+        const minutes = Math.floor(this.elapsedTime / 60);
+        const seconds = this.elapsedTime % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    /**
      * Obtiene los datos de la sesión
      * @returns {Object}
      */
@@ -95,7 +127,8 @@ export class QuizSession {
             currentSentenceIndex: this.currentSentenceIndex,
             userProgress: this.userProgress,
             userErrors: this.userErrors,
-            totalAttempts: this.totalAttempts
+            totalAttempts: this.totalAttempts,
+            elapsedTime: this.elapsedTime
         };
     }
 }

@@ -22,16 +22,26 @@ export class ResultsView {
     /**
      * Muestra los resultados del quiz
      * @param {Object} results - Objeto con los resultados calculados
+     * @param {number} elapsedTime - Tiempo transcurrido en segundos
      */
-    showResults(results) {
+    showResults(results, elapsedTime = 0) {
         // Mostrar rango
         this.finalRank.textContent = `Rango ${results.rank}`;
         this.finalRank.className = `rank-display rank-${results.rank}`;
         this.rankDescription.textContent = results.description;
 
+        // Formatear tiempo
+        const minutes = Math.floor(elapsedTime / 60);
+        const seconds = elapsedTime % 60;
+        const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
         // Mostrar estadísticas totales
         const totalStatsHTML = `
             <div class="total-stats">
+                <div class="stat-item">
+                    <span class="stat-label">⏱️ Tiempo:</span>
+                    <span class="stat-value">${formattedTime}</span>
+                </div>
                 <div class="stat-item">
                     <span class="stat-label">Revisiones totales:</span>
                     <span class="stat-value">${results.totalAttempts}</span>

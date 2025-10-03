@@ -82,6 +82,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .progress-info {
@@ -92,6 +94,25 @@ body {
 
 .total-sentences {
     color: var(--text-secondary);
+}
+
+.timer-display {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    background: var(--bg-secondary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.timer-display:hover {
+    background: var(--bg-tertiary);
+    transform: scale(1.05);
 }
 
 /* Secciones de contenido */
@@ -720,6 +741,11 @@ body {
     .quiz-header {
         flex-direction: column;
         gap: 15px;
+    }
+
+    .timer-display {
+        font-size: 1rem;
+        padding: 6px 12px;
     }
 
     .writing-buttons {
