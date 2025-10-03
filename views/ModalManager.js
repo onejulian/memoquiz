@@ -46,6 +46,15 @@ export class ModalManager {
         
         this.escapeHandlers.set('error', handleEscape);
         document.addEventListener('keydown', handleEscape);
+
+        // Cerrar al hacer clic en el overlay (fuera del contenido)
+        // Se interpreta como "intentar de nuevo sin ver la frase"
+        const handleOverlayClick = (e) => {
+            if (e.target === this.errorModal) {
+                handleTryAgain();
+            }
+        };
+        this.errorModal.onclick = handleOverlayClick;
     }
 
     /**
@@ -53,6 +62,7 @@ export class ModalManager {
      */
     hideErrorModal() {
         this.errorModal.classList.add('hidden');
+        this.errorModal.onclick = null;
         
         // Remover event listener de Escape
         const handler = this.escapeHandlers.get('error');
