@@ -129,6 +129,8 @@ export class AppController {
             return;
         }
 
+        // Normalizar comillas cursivas a planas antes de procesar
+        const normalizedText = TextProcessor.normalizeText(text);
         const sentences = TextProcessor.splitIntoSentences(text);
         
         if (sentences.length === 0) {
@@ -139,7 +141,7 @@ export class AppController {
             return;
         }
 
-        const paragraph = new Paragraph(text, sentences);
+        const paragraph = new Paragraph(normalizedText, sentences);
         this.paragraphs.push(paragraph);
         this.saveData();
         

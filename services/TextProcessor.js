@@ -8,10 +8,8 @@ export class TextProcessor {
      * @returns {string[]} - Array de frases
      */
     static splitIntoSentences(text) {
-        // Normalizar texto: convertir comillas simples y dobles
-        let normalizedText = text
-            .replace(/[""]/g, '"')  // Normalizar comillas dobles
-            .replace(/['']/g, "'"); // Normalizar comillas simples
+        // Normalizar texto usando el mismo método de normalización
+        let normalizedText = this.normalizeText(text);
 
         // Agregar punto final si el texto no termina con punto, ? o !
         if (!/[.!?]$/.test(normalizedText.trim())) {
@@ -35,9 +33,10 @@ export class TextProcessor {
     static normalizeText(text) {
         return text
             .trim()
-            // Solo normalizar comillas curvas a comillas planas
-            .replace(/[""]/g, '"')  // Comillas dobles curvas → rectas
-            .replace(/['']/g, "'"); // Comillas simples curvas → rectas
+            // Normalizar todos los tipos de comillas curvas a comillas planas
+            .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')  // Comillas dobles curvas → rectas
+            .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // Comillas simples curvas → rectas
+            .replace(/[\u00AB\u00BB]/g, '"'); // Comillas angulares « » → rectas
     }
 
     /**
