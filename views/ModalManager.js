@@ -6,6 +6,8 @@ export class ModalManager {
         this.errorModal = document.getElementById('error-modal');
         this.historyModal = document.getElementById('history-modal');
         this.historyContent = document.getElementById('history-content');
+        this.quitConfirmModal = document.getElementById('quit-confirm-modal');
+        this.deleteConfirmModal = document.getElementById('delete-confirm-modal');
         
         this.escapeHandlers = new Map();
     }
@@ -124,6 +126,122 @@ export class ModalManager {
         if (handler) {
             document.removeEventListener('keydown', handler);
             this.escapeHandlers.delete('history');
+        }
+    }
+
+    /**
+     * Muestra el modal de confirmación para abandonar el quiz
+     * @param {Function} onConfirm - Callback al confirmar
+     * @param {Function} onCancel - Callback al cancelar
+     */
+    showQuitConfirmModal(onConfirm, onCancel) {
+        this.quitConfirmModal.classList.remove('hidden');
+
+        const confirmBtn = document.getElementById('confirm-quit-btn');
+        const cancelBtn = document.getElementById('cancel-quit-btn');
+
+        const handleConfirm = () => {
+            this.hideQuitConfirmModal();
+            onConfirm();
+        };
+
+        const handleCancel = () => {
+            this.hideQuitConfirmModal();
+            if (onCancel) onCancel();
+        };
+
+        confirmBtn.onclick = handleConfirm;
+        cancelBtn.onclick = handleCancel;
+
+        // Event listener para tecla Escape
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                handleCancel();
+            }
+        };
+        
+        this.escapeHandlers.set('quit', handleEscape);
+        document.addEventListener('keydown', handleEscape);
+
+        // Cerrar al hacer clic en el overlay
+        const handleOverlayClick = (e) => {
+            if (e.target === this.quitConfirmModal) {
+                handleCancel();
+            }
+        };
+        this.quitConfirmModal.onclick = handleOverlayClick;
+    }
+
+    /**
+     * Oculta el modal de confirmación de abandono
+     */
+    hideQuitConfirmModal() {
+        this.quitConfirmModal.classList.add('hidden');
+        this.quitConfirmModal.onclick = null;
+        
+        // Remover event listener de Escape
+        const handler = this.escapeHandlers.get('quit');
+        if (handler) {
+            document.removeEventListener('keydown', handler);
+            this.escapeHandlers.delete('quit');
+        }
+    }
+
+    /**
+     * Muestra el modal de confirmación para eliminar párrafo
+     * @param {Function} onConfirm - Callback al confirmar
+     * @param {Function} onCancel - Callback al cancelar
+     */
+    showDeleteConfirmModal(onConfirm, onCancel) {
+        this.deleteConfirmModal.classList.remove('hidden');
+
+        const confirmBtn = document.getElementById('confirm-delete-btn');
+        const cancelBtn = document.getElementById('cancel-delete-btn');
+
+        const handleConfirm = () => {
+            this.hideDeleteConfirmModal();
+            onConfirm();
+        };
+
+        const handleCancel = () => {
+            this.hideDeleteConfirmModal();
+            if (onCancel) onCancel();
+        };
+
+        confirmBtn.onclick = handleConfirm;
+        cancelBtn.onclick = handleCancel;
+
+        // Event listener para tecla Escape
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                handleCancel();
+            }
+        };
+        
+        this.escapeHandlers.set('delete', handleEscape);
+        document.addEventListener('keydown', handleEscape);
+
+        // Cerrar al hacer clic en el overlay
+        const handleOverlayClick = (e) => {
+            if (e.target === this.deleteConfirmModal) {
+                handleCancel();
+            }
+        };
+        this.deleteConfirmModal.onclick = handleOverlayClick;
+    }
+
+    /**
+     * Oculta el modal de confirmación de eliminación
+     */
+    hideDeleteConfirmModal() {
+        this.deleteConfirmModal.classList.add('hidden');
+        this.deleteConfirmModal.onclick = null;
+        
+        // Remover event listener de Escape
+        const handler = this.escapeHandlers.get('delete');
+        if (handler) {
+            document.removeEventListener('keydown', handler);
+            this.escapeHandlers.delete('delete');
         }
     }
 }

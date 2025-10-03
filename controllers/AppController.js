@@ -301,10 +301,12 @@ export class AppController {
      * Maneja el abandono del quiz
      */
     handleQuitQuiz() {
-        if (confirm('¿Estás seguro de que quieres abandonar el quiz? Se perderá todo el progreso.')) {
-            this.currentSession = null;
-            this.screenManager.showScreen('start');
-        }
+        this.modalManager.showQuitConfirmModal(
+            () => {
+                this.currentSession = null;
+                this.screenManager.showScreen('start');
+            }
+        );
     }
 
     /**
@@ -333,18 +335,20 @@ export class AppController {
      * @param {string} paragraphId - ID del párrafo
      */
     handleDeleteParagraph(paragraphId) {
-        if (confirm('¿Estás seguro de que quieres eliminar este párrafo? También se eliminarán todos sus resultados.')) {
-            this.paragraphs = this.paragraphs.filter(p => p.id !== paragraphId);
-            this.results = this.results.filter(r => r.paragraphId !== paragraphId);
-            this.saveData();
-            
-            this.startView.renderSavedParagraphs(
-                this.paragraphs,
-                this.getResultsForParagraph.bind(this)
-            );
-            
-            NotificationManager.show('Párrafo eliminado', 'info');
-        }
+        this.modalManager.showDeleteConfirmModal(
+            () => {
+                this.paragraphs = this.paragraphs.filter(p => p.id !== paragraphId);
+                this.results = this.results.filter(r => r.paragraphId !== paragraphId);
+                this.saveData();
+                
+                this.startView.renderSavedParagraphs(
+                    this.paragraphs,
+                    this.getResultsForParagraph.bind(this)
+                );
+                
+                NotificationManager.show('Párrafo eliminado', 'info');
+            }
+        );
     }
 
     /**
