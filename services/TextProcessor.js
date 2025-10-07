@@ -11,19 +11,25 @@ export class TextProcessor {
         // Normalizar texto usando el mismo método de normalización
         let normalizedText = this.normalizeText(text);
 
-        // Agregar punto final si el texto no termina con punto, ? o ! (o con ." o .')
-        if (!/[.!?]$/.test(normalizedText.trim()) && 
-            !normalizedText.trim().endsWith('."') && 
-            !normalizedText.trim().endsWith(".'")) {
+        // Agregar punto final si el texto no termina con punto, ? o ! (o con .", .', ?" o ?')
+        const endsWithQuotedPunctuation = normalizedText.trim().endsWith('."') || 
+                                          normalizedText.trim().endsWith(".'") ||
+                                          normalizedText.trim().endsWith('?"') ||
+                                          normalizedText.trim().endsWith("?'");
+        if (!/[.!?]$/.test(normalizedText.trim()) && !endsWithQuotedPunctuation) {
             normalizedText = normalizedText.trim() + '.';
         }
 
-        // Dividir por puntos, signos de interrogación o exclamación (incluyendo ." y .') 
+        // Dividir por puntos, signos de interrogación o exclamación (incluyendo .", .', ?" y ?') 
         const sentences = normalizedText
             .split(/(?<=[.!?]["']|[.!?])(?=\s|$)/)
             .map(sentence => sentence.trim())
             .filter(sentence => sentence.length > 0 && 
-                (/[.!?]$/.test(sentence) || sentence.endsWith('."') || sentence.endsWith(".'"))
+                (/[.!?]$/.test(sentence) || 
+                 sentence.endsWith('."') || 
+                 sentence.endsWith(".'") ||
+                 sentence.endsWith('?"') ||
+                 sentence.endsWith("?'"))
             );
 
         return sentences;
