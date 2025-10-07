@@ -11,16 +11,20 @@ export class TextProcessor {
         // Normalizar texto usando el mismo método de normalización
         let normalizedText = this.normalizeText(text);
 
-        // Agregar punto final si el texto no termina con punto, ? o !
-        if (!/[.!?]$/.test(normalizedText.trim())) {
+        // Agregar punto final si el texto no termina con punto, ? o ! (o con ." o .')
+        if (!/[.!?]$/.test(normalizedText.trim()) && 
+            !normalizedText.trim().endsWith('."') && 
+            !normalizedText.trim().endsWith(".'")) {
             normalizedText = normalizedText.trim() + '.';
         }
 
-        // Dividir por puntos, signos de interrogación o exclamación
+        // Dividir por puntos, signos de interrogación o exclamación (incluyendo ." y .') 
         const sentences = normalizedText
-            .split(/(?<=[.!?])(?=\s|$)/)
+            .split(/(?<=[.!?]["']|[.!?])(?=\s|$)/)
             .map(sentence => sentence.trim())
-            .filter(sentence => sentence.length > 0 && /[.!?]$/.test(sentence));
+            .filter(sentence => sentence.length > 0 && 
+                (/[.!?]$/.test(sentence) || sentence.endsWith('."') || sentence.endsWith(".'"))
+            );
 
         return sentences;
     }
