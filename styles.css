@@ -344,6 +344,9 @@ body {
 .sentence-results {
     display: grid;
     gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .sentence-result {
@@ -832,6 +835,10 @@ body {
 
     .history-stats {
         gap: 15px;
+    }
+
+    .sentence-results {
+        max-height: 300px;
     }
 }
 
