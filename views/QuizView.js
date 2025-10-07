@@ -40,6 +40,25 @@ export class QuizView {
             e.preventDefault();
             NotificationManager.show('No se permite pegar texto. Debes escribir de memoria.', 'warning');
         });
+
+        // Atajo de teclado: Ctrl + Enter para enviar frase
+        this.userInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                callbacks.onSubmitSentence();
+            }
+        });
+
+        // Atajo de teclado: Enter para comenzar a escribir (cuando está en la sección de estudio)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.ctrlKey) {
+                // Solo funciona si la sección de estudio está visible
+                if (this.studySection && !this.studySection.classList.contains('hidden')) {
+                    e.preventDefault();
+                    callbacks.onReady();
+                }
+            }
+        });
     }
 
     /**
