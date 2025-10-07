@@ -70,7 +70,7 @@ export class QuizView {
     showStudySection(sentence, sentenceNum, totalSentences) {
         this.currentSentenceNum.textContent = `Frase ${sentenceNum}`;
         this.totalSentences.textContent = `de ${totalSentences}`;
-        this.currentSentenceText.textContent = sentence;
+        this.currentSentenceText.textContent = sentence.slice(0, -1);
 
         this.screenManager.hideElement(this.writingSection);
         this.screenManager.showElement(this.studySection);
