@@ -60,6 +60,66 @@ export class TextProcessor {
     }
 
     /**
+     * Calcula la distancia de Levenshtein entre dos textos
+     * @param {string} str1 - Primer texto
+     * @param {string} str2 - Segundo texto
+     * @returns {number} - Distancia de Levenshtein
+     */
+    static levenshteinDistance(str1, str2) {
+        const m = str1.length;
+        const n = str2.length;
+        const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+
+        for (let i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (let j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+
+        for (let i = 1; i <= m; i++) {
+            for (let j = 1; j <= n; j++) {
+                if (str1[i - 1] === str2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(
+                        dp[i - 1][j] + 1,    // eliminación
+                        dp[i][j - 1] + 1,    // inserción
+                        dp[i - 1][j - 1] + 1 // sustitución
+                    );
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    /**
+     * Calcula el porcentaje de similitud entre dos textos
+     * @param {string} userText - Texto del usuario
+     * @param {string} correctText - Texto correcto
+     * @returns {number} - Porcentaje de similitud (0-100)
+     */
+    static calculateSimilarity(userText, correctText) {
+        const normalizedUserText = this.normalizeText(userText);
+        const normalizedCorrectText = this.normalizeText(correctText);
+
+        // Si son iguales, retornar 100%
+        if (normalizedUserText === normalizedCorrectText) {
+            return 100;
+        }
+
+        // Calcular distancia de Levenshtein
+        const distance = this.levenshteinDistance(normalizedUserText, normalizedCorrectText);
+        const maxLength = Math.max(normalizedUserText.length, normalizedCorrectText.length);
+        
+        // Calcular porcentaje de similitud
+        const similarity = ((maxLength - distance) / maxLength) * 100;
+        
+        return Math.max(0, Math.round(similarity));
+    }
+
+    /**
      * Convierte un texto a representación JSON para debugging
      * @param {string} text - Texto a representar
      * @returns {string} - Representación JSON

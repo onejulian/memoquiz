@@ -14,11 +14,28 @@ export class ModalManager {
 
     /**
      * Muestra el modal de error
+     * @param {number} similarity - Porcentaje de similitud (0-100)
      * @param {Function} onReview - Callback al revisar la frase
      * @param {Function} onTryAgain - Callback al intentar de nuevo
      */
-    showErrorModal(onReview, onTryAgain) {
+    showErrorModal(similarity, onReview, onTryAgain) {
         this.errorModal.classList.remove('hidden');
+
+        // Actualizar el mensaje con el porcentaje de similitud
+        const modalMessage = this.errorModal.querySelector('.modal-message');
+        if (modalMessage) {
+            modalMessage.innerHTML = `
+                <p>La frase que escribiste no es correcta.</p>
+                <div class="similarity-indicator">
+                    <span class="similarity-label">Similitud:</span>
+                    <span class="similarity-value">${similarity}%</span>
+                    <div class="similarity-bar">
+                        <div class="similarity-fill" style="width: ${similarity}%"></div>
+                    </div>
+                </div>
+                <p style="margin-top: 15px;">Elige cómo continuar:</p>
+            `;
+        }
 
         // Configurar botones
         const reviewBtn = document.getElementById('review-sentence-btn');
