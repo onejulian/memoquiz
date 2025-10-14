@@ -214,7 +214,8 @@ export class AppController {
             return;
         }
 
-        const correctText = this.currentSession.getCurrentSentence();
+        const currentSentenceText = document.getElementById('current-sentence-text');
+        const correctText = currentSentenceText.textContent;
         const isCorrect = TextProcessor.compareTexts(userText, correctText);
 
         if (isCorrect) {

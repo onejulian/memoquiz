@@ -56,17 +56,7 @@ export class TextProcessor {
      * @returns {boolean} - true si son iguales
      */
     static compareTexts(userText, correctText) {
-        const normalizedUserText = this.normalizeText(userText);
-        const normalizedCorrectText = this.normalizeText(correctText);
-
-        // Comparación exacta (case-sensitive, con tildes, puntuación, etc.)
-        // Pero permite que el punto final sea opcional en la respuesta del usuario
-        const isExactMatch = normalizedUserText === normalizedCorrectText;
-        const userWithoutTrailingPeriod = normalizedUserText.replace(/\.$/, '');
-        const correctWithoutTrailingPeriod = normalizedCorrectText.replace(/\.$/, '');
-        const isMatchWithoutTrailingPeriod = userWithoutTrailingPeriod === correctWithoutTrailingPeriod;
-
-        return isExactMatch || isMatchWithoutTrailingPeriod;
+        return userText === correctText.replace(/\u200b/g, '');
     }
 
     /**
