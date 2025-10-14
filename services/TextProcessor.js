@@ -56,7 +56,7 @@ export class TextProcessor {
      * @returns {boolean} - true si son iguales
      */
     static compareTexts(userText, correctText) {
-        return userText === correctText.replace(/\u200b/g, '');
+        return userText === this.normalizeText(correctText.replace(/\u200b/g, ''));
     }
 
     /**
