@@ -8,6 +8,7 @@ export class ModalManager {
         this.historyContent = document.getElementById('history-content');
         this.quitConfirmModal = document.getElementById('quit-confirm-modal');
         this.deleteConfirmModal = document.getElementById('delete-confirm-modal');
+        this.clearHistoryModal = document.getElementById('clear-history-modal');
         
         this.escapeHandlers = new Map();
     }
@@ -352,6 +353,78 @@ export class ModalManager {
         if (handler) {
             document.removeEventListener('keydown', handler);
             this.escapeHandlers.delete('delete');
+        }
+    }
+
+    /**
+     * Muestra el modal de confirmación para limpiar historial
+     * @param {Function} onConfirm - Callback al confirmar
+     * @param {Function} onCancel - Callback al cancelar
+     */
+    showClearHistoryModal(onConfirm, onCancel) {
+        this.clearHistoryModal.classList.remove('hidden');
+
+        const confirmBtn = document.getElementById('confirm-clear-history-btn');
+        const cancelBtn = document.getElementById('cancel-clear-history-btn');
+
+        const handleConfirm = () => {
+            this.hideClearHistoryModal();
+            onConfirm();
+        };
+
+        const handleCancel = () => {
+            this.hideClearHistoryModal();
+            if (onCancel) onCancel();
+        };
+
+        confirmBtn.onclick = handleConfirm;
+        cancelBtn.onclick = handleCancel;
+
+        // Event listener para tecla Escape y atajos
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') {
+                handleCancel();
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            // S = Sí, limpiar
+            if (key === 's' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleConfirm();
+            }
+            // N = No, cancelar
+            else if (key === 'n' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleCancel();
+            }
+        };
+        
+        this.escapeHandlers.set('clearHistory', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+
+        // Cerrar al hacer clic en el overlay
+        const handleOverlayClick = (e) => {
+            if (e.target === this.clearHistoryModal) {
+                handleCancel();
+            }
+        };
+        this.clearHistoryModal.onclick = handleOverlayClick;
+    }
+
+    /**
+     * Oculta el modal de confirmación de limpieza de historial
+     */
+    hideClearHistoryModal() {
+        this.clearHistoryModal.classList.add('hidden');
+        this.clearHistoryModal.onclick = null;
+        
+        // Remover event listener de Escape
+        const handler = this.escapeHandlers.get('clearHistory');
+        if (handler) {
+            document.removeEventListener('keydown', handler);
+            this.escapeHandlers.delete('clearHistory');
         }
     }
 }

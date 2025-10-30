@@ -43,7 +43,8 @@ export class AppController {
         this.screenManager.showScreen('start');
         this.startView.renderSavedParagraphs(
             this.paragraphs,
-            this.getResultsForParagraph.bind(this)
+            this.getResultsForParagraph.bind(this),
+            this.getBestResultForParagraph.bind(this)
         );
     }
 
@@ -56,7 +57,8 @@ export class AppController {
             onAddParagraph: this.handleAddParagraph.bind(this),
             onStartQuiz: this.handleStartQuiz.bind(this),
             onDeleteParagraph: this.handleDeleteParagraph.bind(this),
-            onViewHistory: this.handleViewHistory.bind(this)
+            onViewHistory: this.handleViewHistory.bind(this),
+            onClearHistory: this.handleClearHistory.bind(this)
         });
 
         // Quiz View
@@ -108,7 +110,15 @@ export class AppController {
         this.paragraphs = paragraphsData.map(p => Paragraph.fromJSON(p));
 
         const resultsData = this.storageService.loadResults();
-        this.results = resultsData.map(r => Result.fromJSON(r));
+        const allResults = resultsData.map(r => Result.fromJSON(r));
+        
+        // Limpiar resultados antiguos, mantener solo los últimos 10 por párrafo
+        this.results = RankCalculator.cleanOldResults(allResults, 10);
+        
+        // Si se eliminaron resultados, guardar la versión limpia
+        if (this.results.length < allResults.length) {
+            this.storageService.saveResults(this.results);
+        }
     }
 
     /**
@@ -148,7 +158,8 @@ export class AppController {
         this.startView.clearInput();
         this.startView.renderSavedParagraphs(
             this.paragraphs,
-            this.getResultsForParagraph.bind(this)
+            this.getResultsForParagraph.bind(this),
+            this.getBestResultForParagraph.bind(this)
         );
         
         this.startView.showNotification(
@@ -316,6 +327,10 @@ export class AppController {
         );
 
         this.results.push(result);
+        
+        // Limpiar resultados antiguos, mantener solo los últimos 10 por párrafo
+        this.results = RankCalculator.cleanOldResults(this.results, 10);
+        
         this.saveData();
 
         this.resultsView.showResults(calculatedResults, this.currentSession.elapsedTime);
@@ -352,7 +367,8 @@ export class AppController {
         this.screenManager.showScreen('start');
         this.startView.renderSavedParagraphs(
             this.paragraphs,
-            this.getResultsForParagraph.bind(this)
+            this.getResultsForParagraph.bind(this),
+            this.getBestResultForParagraph.bind(this)
         );
     }
 
@@ -369,7 +385,8 @@ export class AppController {
                 
                 this.startView.renderSavedParagraphs(
                     this.paragraphs,
-                    this.getResultsForParagraph.bind(this)
+                    this.getResultsForParagraph.bind(this),
+                    this.getBestResultForParagraph.bind(this)
                 );
                 
                 NotificationManager.show('Párrafo eliminado', 'info');
@@ -394,12 +411,44 @@ export class AppController {
     }
 
     /**
-     * Obtiene los resultados de un párrafo específico
+     * Maneja la limpieza del historial de un párrafo
      * @param {string} paragraphId - ID del párrafo
-     * @returns {Result[]} - Array de resultados ordenados
+     */
+    handleClearHistory(paragraphId) {
+        this.modalManager.showClearHistoryModal(
+            () => {
+                // Eliminar todos los resultados de este párrafo
+                this.results = this.results.filter(r => r.paragraphId !== paragraphId);
+                this.saveData();
+                
+                // Re-renderizar la lista de párrafos
+                this.startView.renderSavedParagraphs(
+                    this.paragraphs,
+                    this.getResultsForParagraph.bind(this),
+                    this.getBestResultForParagraph.bind(this)
+                );
+                
+                NotificationManager.show('Historial limpiado correctamente', 'success');
+            }
+        );
+    }
+
+    /**
+     * Obtiene los resultados de un párrafo específico (ordenados por fecha, más reciente primero)
+     * @param {string} paragraphId - ID del párrafo
+     * @returns {Result[]} - Array de resultados ordenados y limitados a 10
      */
     getResultsForParagraph(paragraphId) {
-        return RankCalculator.getResultsForParagraph(this.results, paragraphId);
+        return RankCalculator.getResultsForParagraph(this.results, paragraphId, 10);
+    }
+
+    /**
+     * Obtiene el mejor resultado de un párrafo específico
+     * @param {string} paragraphId - ID del párrafo
+     * @returns {Result|null} - Mejor resultado o null
+     */
+    getBestResultForParagraph(paragraphId) {
+        return RankCalculator.getBestResultForParagraph(this.results, paragraphId);
     }
 }
 

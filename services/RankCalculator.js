@@ -62,21 +62,73 @@ export class RankCalculator {
     }
 
     /**
-     * Ordena resultados por párrafo (mejor rango primero, luego por fecha)
+     * Obtiene resultados de un párrafo (ordenados por fecha, más reciente primero)
      * @param {Result[]} results - Array de resultados
      * @param {string} paragraphId - ID del párrafo
-     * @returns {Result[]} - Resultados ordenados
+     * @param {number} limit - Límite de resultados (por defecto 10)
+     * @returns {Result[]} - Resultados ordenados y limitados
      */
-    static getResultsForParagraph(results, paragraphId) {
+    static getResultsForParagraph(results, paragraphId, limit = 10) {
         return results
             .filter(result => result.paragraphId === paragraphId)
             .sort((a, b) => {
-                // Ordenar por rango (S mejor que A, etc.) y luego por fecha
-                if (a.getRankOrder() !== b.getRankOrder()) {
-                    return a.getRankOrder() - b.getRankOrder();
-                }
+                // Ordenar por fecha (más reciente primero)
                 return new Date(b.completedAt) - new Date(a.completedAt);
-            });
+            })
+            .slice(0, limit); // Limitar a los últimos N resultados
+    }
+
+    /**
+     * Obtiene el mejor resultado de un párrafo
+     * @param {Result[]} results - Array de resultados
+     * @param {string} paragraphId - ID del párrafo
+     * @returns {Result|null} - Mejor resultado o null
+     */
+    static getBestResultForParagraph(results, paragraphId) {
+        const paragraphResults = results.filter(result => result.paragraphId === paragraphId);
+        
+        if (paragraphResults.length === 0) {
+            return null;
+        }
+
+        // Ordenar por mejor rango primero, luego por fecha más reciente
+        return paragraphResults.sort((a, b) => {
+            if (a.getRankOrder() !== b.getRankOrder()) {
+                return a.getRankOrder() - b.getRankOrder();
+            }
+            return new Date(b.completedAt) - new Date(a.completedAt);
+        })[0];
+    }
+
+    /**
+     * Limpia resultados antiguos manteniendo solo los últimos N por párrafo
+     * @param {Result[]} results - Array de todos los resultados
+     * @param {number} maxPerParagraph - Máximo de resultados por párrafo (por defecto 10)
+     * @returns {Result[]} - Array de resultados limpiado
+     */
+    static cleanOldResults(results, maxPerParagraph = 10) {
+        // Agrupar resultados por párrafo
+        const resultsByParagraph = {};
+        
+        results.forEach(result => {
+            if (!resultsByParagraph[result.paragraphId]) {
+                resultsByParagraph[result.paragraphId] = [];
+            }
+            resultsByParagraph[result.paragraphId].push(result);
+        });
+
+        // Mantener solo los últimos N por párrafo
+        const cleanedResults = [];
+        
+        for (const paragraphId in resultsByParagraph) {
+            const paragraphResults = resultsByParagraph[paragraphId]
+                .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+                .slice(0, maxPerParagraph);
+            
+            cleanedResults.push(...paragraphResults);
+        }
+
+        return cleanedResults;
     }
 }
 

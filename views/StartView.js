@@ -35,6 +35,8 @@ export class StartView {
                 callbacks.onDeleteParagraph(paragraphId);
             } else if (e.target.matches('.view-history-btn')) {
                 callbacks.onViewHistory(paragraphId);
+            } else if (e.target.matches('.clear-history-btn')) {
+                callbacks.onClearHistory(paragraphId);
             }
         });
 
@@ -82,8 +84,9 @@ export class StartView {
      * Renderiza la lista de párrafos guardados
      * @param {Paragraph[]} paragraphs - Array de párrafos
      * @param {Function} getResultsForParagraph - Función para obtener resultados
+     * @param {Function} getBestResult - Función para obtener el mejor resultado
      */
-    renderSavedParagraphs(paragraphs, getResultsForParagraph) {
+    renderSavedParagraphs(paragraphs, getResultsForParagraph, getBestResult) {
         this.savedParagraphsContainer.innerHTML = '';
 
         if (paragraphs.length === 0) {
@@ -98,11 +101,12 @@ export class StartView {
 
             const preview = paragraph.getPreview(100);
             const results = getResultsForParagraph(paragraph.id);
+            const bestResult = getBestResult(paragraph.id);
 
             paragraphElement.innerHTML = `
                 <div class="saved-paragraph-title">
                     Párrafo con ${paragraph.getSentenceCount()} frases
-                    ${results.length > 0 ? `<span class="best-rank"> - Mejor: ${results[0].rank}</span>` : ''}
+                    ${bestResult ? `<span class="best-rank"> - Mejor: ${bestResult.rank}</span>` : ''}
                 </div>
                 <div class="saved-paragraph-preview">${preview}</div>
                 <div class="saved-paragraph-actions">
@@ -112,6 +116,9 @@ export class StartView {
                     ${results.length > 0 ? `
                         <button class="btn btn-secondary btn-small view-history-btn" data-paragraph-id="${paragraph.id}">
                             Ver Historial (${results.length})
+                        </button>
+                        <button class="btn btn-secondary btn-small clear-history-btn" data-paragraph-id="${paragraph.id}">
+                            Limpiar Historial
                         </button>
                     ` : ''}
                     <button class="btn btn-secondary btn-small delete-paragraph-btn" data-paragraph-id="${paragraph.id}">

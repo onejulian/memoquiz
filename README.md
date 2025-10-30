@@ -131,7 +131,7 @@ La aplicación ha sido refactorizada siguiendo principios de **Programación Ori
 - Dar coherencia al hoover ✅
 - Afinar animaciones ✅
 - Poder tener una pequeña pista del lugar donde está el error cuando una frase se escribe mal ✅
-- Mantener un historial limitado de 10 intentos, ordenarlos por fecha
+- Mantener un historial limitado de 10 intentos, ordenarlos por fecha ✅
 - Agregar analytics sobre el historial
 - Agregar soporte offline
 - Agregar autenticación y manejo online/offline
