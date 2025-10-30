@@ -75,6 +75,31 @@ export class AppController {
             onBackToStart: this.handleBackToStart.bind(this)
         });
 
+        // Data Management - Export
+        const exportBtn = document.getElementById('export-data-btn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', this.handleExportData.bind(this));
+        }
+
+        // Data Management - Import
+        const importBtn = document.getElementById('import-data-btn');
+        const importFileInput = document.getElementById('import-file-input');
+        
+        if (importBtn && importFileInput) {
+            importBtn.addEventListener('click', () => {
+                importFileInput.click();
+            });
+
+            importFileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    this.handleImportData(file);
+                    // Resetear el input para permitir seleccionar el mismo archivo de nuevo
+                    e.target.value = '';
+                }
+            });
+        }
+
         // Modal Manager
         const closeHistoryBtn = document.getElementById('close-history-modal');
         if (closeHistoryBtn) {
@@ -449,6 +474,119 @@ export class AppController {
      */
     getBestResultForParagraph(paragraphId) {
         return RankCalculator.getBestResultForParagraph(this.results, paragraphId);
+    }
+
+    /**
+     * Maneja la exportación de datos
+     */
+    handleExportData() {
+        try {
+            const data = this.storageService.exportData();
+            
+            // Crear un blob con los datos JSON
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            
+            // Crear un enlace temporal para descargar el archivo
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Generar nombre de archivo con fecha
+            const date = new Date().toISOString().split('T')[0];
+            a.download = `memoquiz-backup-${date}.json`;
+            
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            NotificationManager.show('Datos exportados correctamente', 'success');
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            NotificationManager.show('Error al exportar los datos: ' + error.message, 'error');
+        }
+    }
+
+    /**
+     * Maneja la importación de datos desde un archivo
+     * @param {File} file - Archivo a importar
+     */
+    handleImportData(file) {
+        // Verificar que sea un archivo JSON
+        if (!file.name.endsWith('.json')) {
+            NotificationManager.show('El archivo debe ser de tipo JSON (.json)', 'error');
+            return;
+        }
+
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            try {
+                // Parsear el contenido del archivo
+                const data = JSON.parse(e.target.result);
+                
+                // Validar la estructura de los datos
+                const validation = this.storageService.validateImportData(data);
+                
+                if (!validation.valid) {
+                    NotificationManager.show(
+                        'Los datos no tienen la estructura correcta: ' + validation.error,
+                        'error'
+                    );
+                    return;
+                }
+                
+                // Mostrar modal de confirmación
+                this.modalManager.showImportConfirmModal(
+                    data,
+                    () => this.confirmImportData(data),
+                    null
+                );
+                
+            } catch (error) {
+                console.error('Error parsing import file:', error);
+                NotificationManager.show(
+                    'Error al leer el archivo: El formato JSON no es válido',
+                    'error'
+                );
+            }
+        };
+        
+        reader.onerror = () => {
+            NotificationManager.show('Error al leer el archivo', 'error');
+        };
+        
+        reader.readAsText(file);
+    }
+
+    /**
+     * Confirma e importa los datos validados
+     * @param {Object} data - Datos validados a importar
+     */
+    confirmImportData(data) {
+        try {
+            // Importar los datos al localStorage
+            this.storageService.importData(data);
+            
+            // Recargar los datos en la aplicación
+            this.loadData();
+            
+            // Re-renderizar la vista
+            this.startView.renderSavedParagraphs(
+                this.paragraphs,
+                this.getResultsForParagraph.bind(this),
+                this.getBestResultForParagraph.bind(this)
+            );
+            
+            NotificationManager.show(
+                `Datos importados correctamente: ${data.paragraphs.length} párrafos y ${data.results.length} resultados`,
+                'success'
+            );
+        } catch (error) {
+            console.error('Error importing data:', error);
+            NotificationManager.show('Error al importar los datos: ' + error.message, 'error');
+        }
     }
 }
 

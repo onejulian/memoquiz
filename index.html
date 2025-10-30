@@ -19,7 +19,18 @@
 
             <div class="input-section">
                 <div class="paragraph-list">
-                    <h3>Párrafos guardados:</h3>
+                    <div class="paragraphs-header">
+                        <h3>Párrafos guardados:</h3>
+                        <div class="data-management-buttons">
+                            <button id="export-data-btn" class="btn btn-secondary btn-small">
+                                📥 Exportar Datos
+                            </button>
+                            <button id="import-data-btn" class="btn btn-secondary btn-small">
+                                📤 Importar Datos
+                            </button>
+                            <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                        </div>
+                    </div>
                     <div id="saved-paragraphs" class="saved-paragraphs">
                         <!-- Los párrafos guardados se mostrarán aquí -->
                     </div>
@@ -219,6 +230,33 @@
                         Sí, limpiar <span class="keyboard-hint">(s)</span>
                     </button>
                     <button id="cancel-clear-history-btn" class="btn btn-secondary modal-btn">
+                        No, cancelar <span class="keyboard-hint">(n)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para importar datos -->
+    <div id="import-confirm-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">⚠️ Importar Datos</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">
+                    Se han detectado <strong id="import-paragraphs-count">0</strong> párrafos y 
+                    <strong id="import-results-count">0</strong> resultados en el archivo.
+                </p>
+                <p class="modal-warning">
+                    ⚠️ <strong>ADVERTENCIA:</strong> Al importar estos datos, se perderán todos tus párrafos 
+                    y resultados actuales. Esta acción no se puede deshacer.
+                </p>
+                <div class="modal-options">
+                    <button id="confirm-import-btn" class="btn btn-primary modal-btn">
+                        Sí, importar <span class="keyboard-hint">(s)</span>
+                    </button>
+                    <button id="cancel-import-btn" class="btn btn-secondary modal-btn">
                         No, cancelar <span class="keyboard-hint">(n)</span>
                     </button>
                 </div>

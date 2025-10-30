@@ -9,6 +9,7 @@ export class ModalManager {
         this.quitConfirmModal = document.getElementById('quit-confirm-modal');
         this.deleteConfirmModal = document.getElementById('delete-confirm-modal');
         this.clearHistoryModal = document.getElementById('clear-history-modal');
+        this.importConfirmModal = document.getElementById('import-confirm-modal');
         
         this.escapeHandlers = new Map();
     }
@@ -425,6 +426,86 @@ export class ModalManager {
         if (handler) {
             document.removeEventListener('keydown', handler);
             this.escapeHandlers.delete('clearHistory');
+        }
+    }
+
+    /**
+     * Muestra el modal de confirmación para importar datos
+     * @param {Object} data - Datos a importar (con paragraphs y results)
+     * @param {Function} onConfirm - Callback al confirmar
+     * @param {Function} onCancel - Callback al cancelar
+     */
+    showImportConfirmModal(data, onConfirm, onCancel) {
+        this.importConfirmModal.classList.remove('hidden');
+
+        // Actualizar los contadores
+        const paragraphsCount = document.getElementById('import-paragraphs-count');
+        const resultsCount = document.getElementById('import-results-count');
+        
+        if (paragraphsCount) paragraphsCount.textContent = data.paragraphs.length;
+        if (resultsCount) resultsCount.textContent = data.results.length;
+
+        const confirmBtn = document.getElementById('confirm-import-btn');
+        const cancelBtn = document.getElementById('cancel-import-btn');
+
+        const handleConfirm = () => {
+            this.hideImportConfirmModal();
+            onConfirm();
+        };
+
+        const handleCancel = () => {
+            this.hideImportConfirmModal();
+            if (onCancel) onCancel();
+        };
+
+        confirmBtn.onclick = handleConfirm;
+        cancelBtn.onclick = handleCancel;
+
+        // Event listener para tecla Escape y atajos
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') {
+                handleCancel();
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            // S = Sí, importar
+            if (key === 's' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleConfirm();
+            }
+            // N = No, cancelar
+            else if (key === 'n' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleCancel();
+            }
+        };
+        
+        this.escapeHandlers.set('import', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+
+        // Cerrar al hacer clic en el overlay
+        const handleOverlayClick = (e) => {
+            if (e.target === this.importConfirmModal) {
+                handleCancel();
+            }
+        };
+        this.importConfirmModal.onclick = handleOverlayClick;
+    }
+
+    /**
+     * Oculta el modal de confirmación de importación
+     */
+    hideImportConfirmModal() {
+        this.importConfirmModal.classList.add('hidden');
+        this.importConfirmModal.onclick = null;
+        
+        // Remover event listener de Escape
+        const handler = this.escapeHandlers.get('import');
+        if (handler) {
+            document.removeEventListener('keydown', handler);
+            this.escapeHandlers.delete('import');
         }
     }
 }
