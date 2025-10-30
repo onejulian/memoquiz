@@ -78,6 +78,7 @@
 
             <div class="quiz-content">
                 <div id="study-section" class="study-section">
+                    <p class="writing-prompt">Memoriza la siguiente frase:</p>
                     <div class="sentence-display">
                         <h2 id="current-sentence-text" class="sentence-text"></h2>
                     </div>
@@ -87,14 +88,13 @@
                 </div>
 
                 <div id="writing-section" class="writing-section hidden">
-                    <div class="writing-prompt">
-                    </div>
-                    <textarea
+                    <p class="writing-prompt">Escribe la frase de memoria:</p>
+                    <div
                         id="user-input"
-                        class="user-input"
-                        placeholder="Escribe aquí la frase que acabas de estudiar..."
+                        class="user-input editable-textarea"
+                        contenteditable="true"
                         rows="4"
-                    ></textarea>
+                    ></div>
                     <div class="writing-buttons">
                         <button id="show-sentence-btn" class="btn btn-secondary">
                             Ver frase nuevamente <span class="keyboard-hint">(v)</span>

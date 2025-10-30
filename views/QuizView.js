@@ -128,7 +128,7 @@ export class QuizView {
     showWritingSection() {
         this.screenManager.hideElement(this.studySection);
         this.screenManager.showElement(this.writingSection);
-        this.userInput.value = '';
+        this.userInput.innerText = '';
         this.userInput.focus();
     }
 
@@ -137,14 +137,14 @@ export class QuizView {
      * @returns {string}
      */
     getUserInput() {
-        return this.userInput.value.trim();
+        return this.userInput.innerText.trim();
     }
 
     /**
      * Limpia el input del usuario
      */
     clearUserInput() {
-        this.userInput.value = '';
+        this.userInput.innerText = '';
         this.userInput.focus();
     }
 
