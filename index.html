@@ -33,7 +33,9 @@
                         rows="6"
                         class="paragraph-input"
                     ></textarea>
-                    <button id="add-paragraph-btn" class="btn btn-primary">Agregar Párrafo</button>
+                    <button id="add-paragraph-btn" class="btn btn-primary">
+                        Agregar Párrafo <span class="keyboard-hint">(A)</span>
+                    </button>
                 </div>
             </div>
 
@@ -58,7 +60,9 @@
                 <div id="timer-display" class="timer-display">
                     ⏱️ <span id="timer-value">00:00</span>
                 </div>
-                <button id="quit-quiz-btn" class="btn btn-secondary">Abandonar</button>
+                <button id="quit-quiz-btn" class="btn btn-secondary">
+                    Abandonar <span class="keyboard-hint">(A)</span>
+                </button>
             </header>
 
             <div class="quiz-content">
@@ -66,7 +70,9 @@
                     <div class="sentence-display">
                         <h2 id="current-sentence-text" class="sentence-text"></h2>
                     </div>
-                    <button id="ready-btn" class="btn btn-primary">Estoy listo para escribir</button>
+                    <button id="ready-btn" class="btn btn-primary">
+                        Estoy listo para escribir <span class="keyboard-hint">(Enter)</span>
+                    </button>
                 </div>
 
                 <div id="writing-section" class="writing-section hidden">
@@ -80,8 +86,12 @@
                         rows="4"
                     ></textarea>
                     <div class="writing-buttons">
-                        <button id="show-sentence-btn" class="btn btn-secondary">Ver frase nuevamente</button>
-                        <button id="submit-sentence-btn" class="btn btn-primary">Enviar frase</button>
+                        <button id="show-sentence-btn" class="btn btn-secondary">
+                            Ver frase nuevamente <span class="keyboard-hint">(V)</span>
+                        </button>
+                        <button id="submit-sentence-btn" class="btn btn-primary">
+                            Enviar frase <span class="keyboard-hint">(Ctrl+Enter)</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -111,8 +121,12 @@
                 </div>
 
                 <div class="results-buttons">
-                    <button id="try-again-btn" class="btn btn-primary">Intentar de nuevo</button>
-                    <button id="back-to-start-btn" class="btn btn-secondary">Volver al inicio</button>
+                    <button id="try-again-btn" class="btn btn-primary">
+                        Intentar de nuevo <span class="keyboard-hint">(I)</span>
+                    </button>
+                    <button id="back-to-start-btn" class="btn btn-secondary">
+                        Volver al inicio <span class="keyboard-hint">(V)</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -128,10 +142,10 @@
                 <p class="modal-message">La frase que escribiste no es correcta. Elige cómo continuar:</p>
                 <div class="modal-options">
                     <button id="review-sentence-btn" class="btn btn-primary modal-btn">
-                        🔄 Ver frase y estudiar nuevamente
+                        🔄 Ver frase y estudiar nuevamente <span class="keyboard-hint">(V)</span>
                     </button>
                     <button id="try-again-modal-btn" class="btn btn-secondary modal-btn">
-                        ✍️ Intentar escribir sin ver la frase
+                        ✍️ Intentar escribir sin ver la frase <span class="keyboard-hint">(I)</span>
                     </button>
                 </div>
             </div>
@@ -163,10 +177,10 @@
                 <p class="modal-message">¿Estás seguro de que quieres abandonar el quiz? Se perderá todo el progreso.</p>
                 <div class="modal-options">
                     <button id="confirm-quit-btn" class="btn btn-primary modal-btn">
-                        Sí, abandonar
+                        Sí, abandonar <span class="keyboard-hint">(S)</span>
                     </button>
                     <button id="cancel-quit-btn" class="btn btn-secondary modal-btn">
-                        No, continuar
+                        No, continuar <span class="keyboard-hint">(N)</span>
                     </button>
                 </div>
             </div>
@@ -183,10 +197,10 @@
                 <p class="modal-message">¿Estás seguro de que quieres eliminar este párrafo? También se eliminarán todos sus resultados.</p>
                 <div class="modal-options">
                     <button id="confirm-delete-btn" class="btn btn-primary modal-btn">
-                        Sí, eliminar
+                        Sí, eliminar <span class="keyboard-hint">(S)</span>
                     </button>
                     <button id="cancel-delete-btn" class="btn btn-secondary modal-btn">
-                        No, cancelar
+                        No, cancelar <span class="keyboard-hint">(N)</span>
                     </button>
                 </div>
             </div>

@@ -54,15 +54,29 @@ export class ModalManager {
         reviewBtn.onclick = handleReview;
         tryAgainBtn.onclick = handleTryAgain;
 
-        // Event listener para tecla Escape
-        const handleEscape = (e) => {
+        // Event listener para tecla Escape y atajos
+        const handleKeydown = (e) => {
             if (e.key === 'Escape') {
                 this.hideErrorModal();
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            // V = Ver frase y estudiar nuevamente
+            if (key === 'v' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleReview();
+            }
+            // I = Intentar escribir sin ver la frase
+            else if (key === 'i' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleTryAgain();
             }
         };
         
-        this.escapeHandlers.set('error', handleEscape);
-        document.addEventListener('keydown', handleEscape);
+        this.escapeHandlers.set('error', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
 
         // Cerrar al hacer clic en el overlay (fuera del contenido)
         // Se interpreta como "intentar de nuevo sin ver la frase"
@@ -184,15 +198,29 @@ export class ModalManager {
         confirmBtn.onclick = handleConfirm;
         cancelBtn.onclick = handleCancel;
 
-        // Event listener para tecla Escape
-        const handleEscape = (e) => {
+        // Event listener para tecla Escape y atajos
+        const handleKeydown = (e) => {
             if (e.key === 'Escape') {
+                handleCancel();
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            // S = Sí, abandonar
+            if (key === 's' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleConfirm();
+            }
+            // N = No, continuar
+            else if (key === 'n' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
                 handleCancel();
             }
         };
         
-        this.escapeHandlers.set('quit', handleEscape);
-        document.addEventListener('keydown', handleEscape);
+        this.escapeHandlers.set('quit', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
 
         // Cerrar al hacer clic en el overlay
         const handleOverlayClick = (e) => {
@@ -242,15 +270,29 @@ export class ModalManager {
         confirmBtn.onclick = handleConfirm;
         cancelBtn.onclick = handleCancel;
 
-        // Event listener para tecla Escape
-        const handleEscape = (e) => {
+        // Event listener para tecla Escape y atajos
+        const handleKeydown = (e) => {
             if (e.key === 'Escape') {
+                handleCancel();
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            
+            // S = Sí, eliminar
+            if (key === 's' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                handleConfirm();
+            }
+            // N = No, cancelar
+            else if (key === 'n' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
                 handleCancel();
             }
         };
         
-        this.escapeHandlers.set('delete', handleEscape);
-        document.addEventListener('keydown', handleEscape);
+        this.escapeHandlers.set('delete', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
 
         // Cerrar al hacer clic en el overlay
         const handleOverlayClick = (e) => {

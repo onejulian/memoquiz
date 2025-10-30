@@ -125,6 +125,16 @@ La aplicación ha sido refactorizada siguiendo principios de **Programación Ori
 - Diálogos modales profesionales para decisiones importantes
 - Libertad total para revisar frases cuando sea necesario
 
+## TODO
+- Agregar opciones de teclado para todos los botones
+- Centrar el texto cuando se escribe un párrafo
+- Poder tener una pequeña pista del lugar donde está el error cuando una frase se escribe mal
+- Mantener un historial limitado de 10 intentos, ordenarlos por fecha
+- Agregar analytics sobre el historial
+- Dar coherencia al hoover
+- Agregar soporte offline
+- Agregar autenticación y manejo online/offline
+
 ## Contribuir
 
 Si encuentras bugs o tienes sugerencias de mejora:

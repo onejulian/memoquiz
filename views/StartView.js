@@ -37,6 +37,30 @@ export class StartView {
                 callbacks.onViewHistory(paragraphId);
             }
         });
+
+        // Atajos de teclado para la pantalla de inicio
+        this.keydownHandler = (e) => {
+            // Solo activar si estamos en la pantalla de inicio
+            const startScreen = document.getElementById('start-screen');
+            if (!startScreen || !startScreen.classList.contains('active')) {
+                return;
+            }
+
+            // Ignorar si el usuario está escribiendo en el textarea
+            if (document.activeElement === this.paragraphInput) {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+
+            // A = Agregar Párrafo
+            if (key === 'a' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                callbacks.onAddParagraph();
+            }
+        };
+
+        document.addEventListener('keydown', this.keydownHandler);
     }
 
     /**
@@ -107,6 +131,15 @@ export class StartView {
      */
     showNotification(message, type) {
         NotificationManager.show(message, type);
+    }
+
+    /**
+     * Limpia los event listeners
+     */
+    cleanup() {
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+        }
     }
 }
 

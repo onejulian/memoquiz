@@ -17,6 +17,30 @@ export class ResultsView {
     setupEventListeners(callbacks) {
         this.tryAgainBtn.addEventListener('click', callbacks.onTryAgain);
         this.backToStartBtn.addEventListener('click', callbacks.onBackToStart);
+
+        // Atajos de teclado para la pantalla de resultados
+        this.keydownHandler = (e) => {
+            // Solo activar si estamos en la pantalla de resultados
+            const resultsScreen = document.getElementById('results-screen');
+            if (!resultsScreen || !resultsScreen.classList.contains('active')) {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+
+            // I = Intentar de nuevo
+            if (key === 'i' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                callbacks.onTryAgain();
+            }
+            // V = Volver al inicio
+            else if (key === 'v' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                callbacks.onBackToStart();
+            }
+        };
+
+        document.addEventListener('keydown', this.keydownHandler);
     }
 
     /**
@@ -81,6 +105,15 @@ export class ResultsView {
 
             this.sentenceResults.appendChild(resultElement);
         });
+    }
+
+    /**
+     * Limpia los event listeners
+     */
+    cleanup() {
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+        }
     }
 }
 

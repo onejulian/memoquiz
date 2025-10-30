@@ -59,6 +59,51 @@ export class QuizView {
                 }
             }
         });
+
+        // Atajos de teclado para la pantalla de quiz
+        this.quizKeydownHandler = (e) => {
+            // Solo activar si estamos en la pantalla de quiz
+            const quizScreen = document.getElementById('quiz-screen');
+            if (!quizScreen || !quizScreen.classList.contains('active')) {
+                return;
+            }
+
+            // Ignorar si el usuario está escribiendo en el textarea
+            if (document.activeElement === this.userInput) {
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+
+            // A = Abandonar
+            if (key === 'a' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                e.preventDefault();
+                callbacks.onQuitQuiz();
+            }
+            // L = Listo para escribir (solo si está en sección de estudio)
+            else if (key === 'l' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                if (this.studySection && !this.studySection.classList.contains('hidden')) {
+                    e.preventDefault();
+                    callbacks.onReady();
+                }
+            }
+            // V = Ver frase nuevamente (solo si está en sección de escritura)
+            else if (key === 'v' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                if (this.writingSection && !this.writingSection.classList.contains('hidden')) {
+                    e.preventDefault();
+                    callbacks.onShowSentence();
+                }
+            }
+            // E = Enviar frase (solo si está en sección de escritura)
+            else if (key === 'e' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+                if (this.writingSection && !this.writingSection.classList.contains('hidden')) {
+                    e.preventDefault();
+                    callbacks.onSubmitSentence();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', this.quizKeydownHandler);
     }
 
     /**
@@ -148,6 +193,15 @@ export class QuizView {
      */
     updateTimerDisplay(formattedTime) {
         this.timerValue.textContent = formattedTime;
+    }
+
+    /**
+     * Limpia los event listeners
+     */
+    cleanup() {
+        if (this.quizKeydownHandler) {
+            document.removeEventListener('keydown', this.quizKeydownHandler);
+        }
     }
 }
 
