@@ -117,7 +117,8 @@ export class TextProcessor {
         // Calcular porcentaje de similitud
         const similarity = ((maxLength - distance) / maxLength) * 100;
         
-        return Math.max(0, Math.round(similarity));
+        // Redondear a máximo 2 decimales, pero si es entero, mostrarlo sin decimales
+        return Math.max(0, parseFloat(similarity.toFixed(2)));
     }
 
     /**
