@@ -46,7 +46,8 @@ export class TextProcessor {
             // Normalizar todos los tipos de comillas curvas a comillas planas
             .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')  // Comillas dobles curvas → rectas
             .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'") // Comillas simples curvas → rectas
-            .replace(/[\u00AB\u00BB]/g, '"'); // Comillas angulares « » → rectas
+            .replace(/[\u00AB\u00BB]/g, '"') // Comillas inglesas → rectas
+            .replace(/\u200b/g, ''); // Espacio invisible
     }
 
     /**
@@ -56,7 +57,7 @@ export class TextProcessor {
      * @returns {boolean} - true si son iguales
      */
     static compareTexts(userText, correctText) {
-        return userText === this.normalizeText(correctText.replace(/\u200b/g, ''));
+        return userText === this.normalizeText(correctText);
     }
 
     /**
