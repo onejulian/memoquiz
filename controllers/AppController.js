@@ -254,6 +254,9 @@ export class AppController {
 
         // Calcular porcentaje de similitud
         const similarity = TextProcessor.calculateSimilarity(userText, correctText);
+        
+        // Encontrar la posición del error
+        const errorInfo = TextProcessor.findErrorPosition(userText, correctText);
 
         // Debug info
         // console.log('Texto usuario:', TextProcessor.repr(userText));
@@ -261,12 +264,14 @@ export class AppController {
         // console.log('Normalizado usuario:', TextProcessor.repr(TextProcessor.normalizeText(userText)));
         // console.log('Normalizado correcto:', TextProcessor.repr(TextProcessor.normalizeText(correctText)));
         // console.log('Similitud:', similarity + '%');
+        // console.log('Error info:', errorInfo);
 
         // Limpiar el campo de entrada siempre que haya un error
         this.quizView.clearUserInput();
 
         this.modalManager.showErrorModal(
             similarity,
+            errorInfo,
             () => this.handleReviewSentence(),
             () => this.handleTryAgainModal()
         );

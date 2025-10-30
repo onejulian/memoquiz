@@ -601,6 +601,51 @@ body {
     transition: width 0.5s ease;
 }
 
+/* Pista del error */
+.error-hint {
+    background: rgba(244, 67, 54, 0.1);
+    border: 2px solid var(--accent-error);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.error-hint-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.error-hint-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
+}
+
+.text-correct {
+    color: var(--text-primary);
+}
+
+.text-error {
+    color: rgb(255, 0, 0);
+    font-weight: 700;
+}
+
+.text-missing {
+    color: rgb(255, 165, 0);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
 .modal-options {
     display: flex;
     gap: 15px;

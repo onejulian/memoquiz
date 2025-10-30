@@ -130,7 +130,7 @@ La aplicación ha sido refactorizada siguiendo principios de **Programación Ori
 - Centrar el texto cuando se escribe un párrafo ✅
 - Dar coherencia al hoover ✅
 - Afinar animaciones ✅
-- Poder tener una pequeña pista del lugar donde está el error cuando una frase se escribe mal
+- Poder tener una pequeña pista del lugar donde está el error cuando una frase se escribe mal ✅
 - Mantener un historial limitado de 10 intentos, ordenarlos por fecha
 - Agregar analytics sobre el historial
 - Agregar soporte offline

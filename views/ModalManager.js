@@ -13,19 +13,55 @@ export class ModalManager {
     }
 
     /**
+     * Escapa HTML para prevenir XSS
+     * @param {string} text - Texto a escapar
+     * @returns {string} - Texto escapado
+     */
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
      * Muestra el modal de error
      * @param {number} similarity - Porcentaje de similitud (0-100)
+     * @param {Object} errorInfo - Información del error (opcional)
      * @param {Function} onReview - Callback al revisar la frase
      * @param {Function} onTryAgain - Callback al intentar de nuevo
      */
-    showErrorModal(similarity, onReview, onTryAgain) {
+    showErrorModal(similarity, errorInfo, onReview, onTryAgain) {
         this.errorModal.classList.remove('hidden');
 
         // Actualizar el mensaje con el porcentaje de similitud
         const modalMessage = this.errorModal.querySelector('.modal-message');
         if (modalMessage) {
+            let errorHintHTML = '';
+            
+            // Si hay información del error, mostrar la pista con todos los segmentos
+            if (errorInfo && errorInfo.hasError && errorInfo.segments) {
+                // Generar HTML para cada segmento
+                const segmentsHTML = errorInfo.segments.map(segment => {
+                    if (segment.type === 'error') {
+                        return `<span class="text-error">${this.escapeHtml(segment.text)}</span>`;
+                    } else if (segment.type === 'missing') {
+                        return `<span class="text-missing">${this.escapeHtml(segment.text)}</span>`;
+                    } else {
+                        return `<span class="text-correct">${this.escapeHtml(segment.text)}</span>`;
+                    }
+                }).join('');
+                
+                errorHintHTML = `
+                    <div class="error-hint">
+                        <p class="error-hint-label">💡 Pista de los errores en tu texto:</p>
+                        <div class="error-hint-text">
+                            ${segmentsHTML}
+                        </div>
+                    </div>
+                `;
+            }
+
             modalMessage.innerHTML = `
-                <p>La frase que escribiste no es correcta.</p>
                 <div class="similarity-indicator">
                     <span class="similarity-label">Similitud:</span>
                     <span class="similarity-value">${similarity}%</span>
@@ -33,6 +69,7 @@ export class ModalManager {
                         <div class="similarity-fill" style="width: ${similarity}%"></div>
                     </div>
                 </div>
+                ${errorHintHTML}
                 <p style="margin-top: 15px;">Elige cómo continuar:</p>
             `;
         }
