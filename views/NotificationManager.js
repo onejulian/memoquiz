@@ -56,7 +56,7 @@ export class NotificationManager {
                     document.body.removeChild(notification);
                 }
             }, 300);
-        }, 4000);
+        }, 1500);
     }
 }
 

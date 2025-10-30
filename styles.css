@@ -150,14 +150,13 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 15px;
-    cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.saved-paragraph:hover {
+/* .saved-paragraph:hover {
     border-color: var(--accent-primary);
     transform: translateY(-2px);
-}
+} */
 
 .saved-paragraph-title {
     font-weight: 600;
@@ -287,6 +286,7 @@ body {
     color: var(--text-primary);
     font-family: inherit;
     font-size: 1rem;
+    text-align: center;
     resize: vertical;
     min-height: 100px;
     margin-bottom: 25px;
